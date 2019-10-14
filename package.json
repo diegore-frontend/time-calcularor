@@ -1,0 +1,32 @@
+{
+  "name": "learning",
+  "version": "1.0.0",
+  "description": "Learning - 2019",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cinépolis Team - IA Interactive",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^2.0.9",
+    "gulp-install": "^0.6.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-nunjucks-render": "^2.2.3",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pretty-html": "^2.0.10",
+    "gulp-server-livereload": "^1.8.0",
+    "gulp-stylus": "^2.4.0",
+    "gulp-uglify": "^1.5.3",
+    "nib": "^1.1.0",
+    "rupture": "^0.6.2"
+  }
+}
+
+
+
+// https://github.com/digitalthrive/Harvest Ejemplo git
+
