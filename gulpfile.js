@@ -18,7 +18,7 @@ var gulp          = require('gulp'),
 	pkg             = require('./package.json'),
 
 	// Html
-	nunjucksRender  = require('gulp-nunjucks-render'),
+	pug 						= require('gulp-pug'),
 	prettyHtml 			= require('gulp-pretty-html'),
 
 	// Stylesheets
@@ -67,21 +67,27 @@ function fileHeader(title) {
 }
 
 const PATHS = {
-	output: 'Preprocess/html',
-	templates: 'Preprocess/nunjucks/templates',
-	pages: 'Preprocess/nunjucks/pages',
-	stylPath: 'Preprocess/stylus/'
+	html: 				'Preprocess/html',
+	stylus: 			'Preprocess/stylus/',
+	pug: 					'Preprocess/pug/',
+	vendors: 			'Preprocess/stylus/',
+	buildHtml: 		'',
+	buildCss: 		'',
+	buildVendors: '',
+	buildImages: 	''
 }
 
-// Partial HTML compiling actions
-gulp.task('nunjucks', function() {
-	return gulp.src(PATHS.pages + '/*.+(html)')
-	.pipe(plumber())
-	.pipe(nunjucksRender({
-		path: [PATHS.templates],
-		watch: true,
-	}))
-	.pipe(gulp.dest(PATHS.output));
+// Compile Pug
+gulp.task('pug', function(){
+	gulp.src([
+			PATHS.pug + '*.pug',
+			'!' + PATHS.pug + '_*.pug',
+			'!' + PATHS.pug + 'inlcudes/_*.pug'
+		])
+		.on('error', console.log)
+		.pipe(gulp.dest(build_path.html))
+		.pipe(notify({ message: 'HTML compiled!' }))
+		.pipe(browsersync.reload({stream: true}));
 });
 
 gulp.task('prettifypages', function () {
