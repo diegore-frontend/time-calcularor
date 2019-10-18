@@ -9,8 +9,8 @@
   "author": "Cinépolis Team - IA Interactive",
   "license": "ISC",
   "devDependencies": {
+    "gulp": "^4.0.2",
     "browser-sync": "^2.26.7",
-    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.3",

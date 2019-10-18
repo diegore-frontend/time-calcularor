@@ -10,7 +10,7 @@
 // npm install --save-dev gulp-uglify
 // npm install --save-dev nib
 
-var gulp						= require('gulp'),
+const gulp						= require('gulp'),
 		gulpif					= require('gulp-if'),
 		
 		// Hader & Notifications
@@ -48,7 +48,7 @@ var gulp						= require('gulp'),
 sass.compiler		= require('node-sass'); 
 
 // PATHS
-var PATHS = {
+const PATHS = {
 	styles: {
 		src: 'Dev/preprocess/Sass',
 	},
@@ -75,7 +75,7 @@ function fileHeader(title) {
 }
 
 // Sass Styles
-gulp.task('sass', function () {
+gulp.task('sass', () => {
 	var streamScss = gulp.src(PATHS.styles.src + '/**/*.scss')
 		.pipe(sass.sync().on('error', sass.logError))
 		.pipe(prefix())
@@ -98,12 +98,12 @@ gulp.task('sass', function () {
 });
 
 // JavaScript
-gulp.task('scripts', function(){
+gulp.task('scripts', () =>{
 	var streamVendors = gulp.src([PATHS.vendors.src + '/*.js*'])
 		.on('error', console.log)
 		.pipe(plumber())
 		.pipe(concat('vendors.min.js'))
-		.pipe(gulpif(isProduction, uglify({ preserveComments: 'some'})))
+		.pipe(gulpif(isProduction, uglify()))
 		.pipe(gulpif(isProduction, header(fileHeader('	'+ headerName + ' - Vendors'))))
 
 	if (isNetcore === true) {
@@ -122,7 +122,7 @@ gulp.task('scripts', function(){
 });
 
 // Pug
-gulp.task('pug', function() {
+gulp.task('pug', () => {
 	return gulp.src(PATHS.html.src + '/*.pug')
 	.pipe(plumber())
 	.pipe(pug())
@@ -130,7 +130,7 @@ gulp.task('pug', function() {
   .pipe(gulp.dest(PATHS.html.out))
 });
 
-gulp.task('prettifypages', function () {
+gulp.task('prettifypages', () => {
 	return gulp.src(PATHS.html.out + '/*.html')
 		.pipe(prettyHtml({
 			indent_with_tabs: '-c',
@@ -142,7 +142,7 @@ gulp.task('prettifypages', function () {
 });
 
 // Minification Images
-gulp.task('images', function(){
+gulp.task('images', () =>{
 	var streamAssets = gulp.src([dev_path.img + '**/*'])
 		.pipe(plumber())
 		.pipe(gulpif(isProduction, imagemin([
@@ -175,15 +175,15 @@ gulp.task('images', function(){
 });
 
 // Static Server + watching scss/html files
-gulp.task('serve', ['sass', 'scripts', 'pug', 'prettifypages'], function() {
+gulp.task('default', () => {
 	browserSync.init({
 		server: "./html"
 	});
-	gulp.watch(PATHS.styles.src + '/**/*.scss', ['sass'])
-	gulp.watch(PATHS.html.src + '/*.pug', ['pug'])
-	gulp.watch(PATHS.vendors.src + '/*.js', ['scripts'])
-	gulp.watch('html', ['prettifypages'])
+
+	gulp.watch(PATHS.html.src + '/*.pug', gulp.series('pug'))
+	gulp.watch(PATHS.styles.src + '/**/*.scss', gulp.series('sass'))
+	gulp.watch(PATHS.vendors.src + '/*.js', gulp.series('scripts'))
+	gulp.watch('Dev/preprocess/Html', gulp.series('prettifypages'))
+	gulp.watch('html').on('change', browserSync.reload)
+
 });
-
-
-gulp.task('default', ['serve', 'sass', 'scripts', 'pug', 'prettifypages']);
